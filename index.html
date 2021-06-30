@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản Lý Bán Hàng</title>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+          integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+<style type="text/css">
+    article .img-collect {
+        width: 500px;
+        height: 400px;
+        border: 2px solid #ccc;
+        border-radius: 8px;
+        margin-left: 38%;
+        text-align: center;
+        position: relative;
+    }
+    article .img-collect img {
+        max-width: 80%;
+        height: 340px;
+        text-align: center;
+    }
+    article .img-collect p {
+        font-size: 18px;
+        font-weight: bold;
+        margin-top: 38px;
+        text-align: center;
+    }
+    article .img-collect #privious {
+        position: absolute;
+        top: 45%;
+        left: 5%;
+        border-radius: 10px 0 0 10px;
+    }
+    article .img-collect #next {
+        position: absolute;
+        top: 45%;
+        right: 5%;
+        border-radius: 0 10px 10px 0;
+    }
+    article .img-collect .go {
+        width: 50px;
+        height: 35px;
+        border: 1px solid #ccc;
+        box-shadow: inset 5px 5px 25px #ccc;
+        text-align: center;
+        line-height: 37px;
+        cursor: pointer;
+        transition: 0.4s;
+    }
+    article .img-collect .go:hover {
+        background: tomato;
+    }
+
+    article .img-collect .go i {
+        font-size: 18px;
+    }
+    th {
+        background-color: whitesmoke;
+        height: 50px;
+        width: 128px;
+    }
+
+    td {
+        text-align: center;
+        border: 1px;
+        border-style: solid;
+        width: 150px;
+        border-color: snow;
+    }
+    tr {
+        text-align: center;
+    }
+    .panel {
+        width: 60%;
+        margin: 0 auto;
+        border: solid darkslategray 1px;
+    }
+    .panel-heading {
+        background-color: lightslategray;
+        padding: 10px;
+        color: white;
+    }
+    .panel-body {
+        padding: 10px;
+    }
+    .panel-body label {
+        font-weight: bold;
+    }
+    .form-group {
+        display: block;
+        margin-bottom: 20px;
+    }
+    .form-control {
+        display: block;
+        width: 98%;
+        font-size: 16px;
+        margin-top: 10px;
+    }
+    .table {
+        width: 100%;
+    }
+    .table tr {
+        border-bottom: solid blue 1px;
+    }
+</style>
+<article>
+    <div style="text-align: center" class="img-collect">
+        <img id="anh" src="images/anh0.png">
+        <p id="title">Ảnh <span id="num">1</span> / <span id="demo">5</span></p>
+        <div id="privious" class="go" onclick="prev()">
+            <i class="fas fa-angle-left"></i>
+        </div>
+        <div id="next" class="go" onclick="next()">
+            <i class="fas fa-angle-right"></i>
+        </div>
+    </div>
+</article><br>
+<div class="panel">
+    <div class="panel-heading">
+        Nhập các số liệu đầu vào:
+    </div>
+    <div class="panel-body">
+        <form method="post">
+            <div class="form-group">
+                <label>Tên Sản Phẩm:</label>
+                <input class="form-control" type="text" name="product_name" id="product_name"
+                       placeholder="Enter a product name">
+            </div>
+            <div class="form-group">
+                <label>Mã Sản Phẩm:</label>
+                <input class="form-control" type="text" name="masanpham" id="product_code"
+                       placeholder="Enter a product code" value="0">
+            </div>
+            <div class="form-group">
+                <label>Số Lượng:</label>
+                <input class="form-control" type="number" name="quantity" id="quantity" placeholder="Enter quantity"
+                       value="0">
+            </div>
+            <div class="form-group">
+                <label>Giá:</label>
+                <input class="form-control" type="number" name="price" id="price" placeholder="Enter price"
+                       value="0">
+            </div>
+            <div class="form-group">
+                <button class="btn btn-outline-primary" type="button" onclick="addProduct()">Thêm Sản Phẩm</button>
+                <button class="btn btn-outline-dark" type="reset">Đặt Lại</button>
+                <br><br>
+            </div>
+        </form>
+        <br>
+        <button class="btn btn-outline-info" onclick="displayProduct();" style="left: 2px;position: relative">Hàng Hoá
+        </button>
+        <input id="keyword" type="text">
+        <button class="btn btn-outline-secondary" onclick="Search()">Tìm Kiếm</button>
+    </div>
+</div>
+<div class="panel" style="margin-top: 20px;">
+    <div class="panel-heading">
+        Thông tin chi tiết:
+    </div>
+    <div class="panel-body">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>STT</th>
+                <th>Hình Ảnh</th>
+                <th>Tên Sản Phẩm</th>
+                <th>Mã Sản Phẩm</th>
+                <th>Số Lượng</th>
+                <th>Giá</th>
+                <th>Thành Tiền</th>
+                <th>Sửa</th>
+                <th>Xoá</th>
+            </tr>
+            </thead>
+            <tbody id="body">
+            </tbody>
+        </table>
+    </div>
+</div>
+<div id="edit" class="report" style="position: relative; left: 350px"></div>
+<script type="text/javascript">
+    class bridals {
+        constructor(productname, price, quantity, link, productcode) {
+            this.productname = productname;
+            this.price = price;
+            this.quantity = quantity;
+            this.link = link;
+            this.money = this.quantity * this.price;
+            this.productcode = productcode;
+        }
+
+        getmoney() {
+            return this.money = this.quantity * this.price;
+        }
+    }
+
+    let listproducts = [];
+    let WeddingDress = new bridals("WeddingDress", 599000, 100, "vaycuoi0.jpg", "001");
+    let PrincessBridal = new bridals("PrincessBridal", 899000, 150, "vaycuoitim.jpeg", "002");
+    let TomatoBridal = new bridals("TomatoBridal", 1299000, 80, "vaycuoido.jpg", "003");
+    listproducts.push(WeddingDress, PrincessBridal, TomatoBridal);
+
+    function displayProduct() {
+        let body = "";
+        for (let i = 0; i < listproducts.length; i++) {
+            body +=
+                "<tr>" +
+                "<th>" + (i + 1) + "</th>" +
+                "<td><img src=" + listproducts[i].link + " width='60' height='60'></td>" +
+                "<td>" + listproducts[i].productname + "</td>" +
+                "<td>" + listproducts[i].productcode + "</td>" +
+                "<td>" + listproducts[i].quantity + "</td>" +
+                "<td>" + listproducts[i].price + "</td>" +
+                "<td>" + listproducts[i].money + "</td>" +
+                "<td><button class='edit' onclick='Edit(" + i + ");'>Sửa</button></td>" +
+                "<td><button class='delete' onclick='Delete(" + i + ");'>Xoá</button></td>" +
+                "</tr>";
+        }
+        document.getElementById("body").innerHTML = body;
+    }
+
+    function addProduct() {
+        let addnew = new bridals();
+        addnew.productname = document.getElementById("product_name").value;
+        addnew.productcode = document.getElementById("product_code").value;
+        addnew.quantity = document.getElementById("quantity").value;
+        addnew.price = document.getElementById("price").value;
+        addnew.getmoney();
+        if (addnew.product_name == "" ||
+            addnew.quantity == "" ||
+            addnew.product_code == "" ||
+            addnew.price == "" || "") {
+        } else {
+            listproducts.push(addnew);
+            displayProduct();
+        }
+    }
+
+    function Delete(i) {
+        let a = confirm("Bạn chắc chắn muốn xóa sản phẩm này?");
+        if (a) {
+            for (let j = i; j < listproducts.length - 1; j++) {
+                listproducts[j] = listproducts[j + 1];
+            }
+            listproducts.length = listproducts.length - 1;
+            displayProduct();
+        }
+    }
+
+    function Edit(i) {
+        let editfile = "<table>" +
+            "<tr>" +
+            "<th colspan='5' style='background-color: floralwhite;height: 20px'>Edit Form</th>" +
+            "</tr>" +
+            "<tr>" +
+            "<th style=height: 20px'>Hình Ảnh</th>" +
+            "<th style=height: 20px'>Tên Sản Phẩm</th>" +
+            "<th style=height: 20px'>Mã Sản Phẩm</th>" +
+            "<th style=height: 20px'>Số Lượng</th>" +
+            "<th style= height: 20px'>Giá</th>" +
+            "</tr>" +
+            "<tr>" +
+            "<td><input id='elink' style='width: 136px;height: 30px ;text-align: center' value=" + listproducts[i].link + "></td>" +
+            "<td><input id='ebridal' style='width: 136px;height: 30px ;text-align: center' value=" + listproducts[i].productname + "></td>" +
+            "<td><input id='eproductcode' style='width: 136px;height: 30px ;text-align: center' value=" + listproducts[i].productcode + "></td>" +
+            "<td><input id='equantity' style='width: 136px;height: 30px ;text-align: center'  value=" + listproducts[i].quantity + "></td>" +
+            "<td><input id='eprice' style='width: 136px;height: 30px ;text-align: center'  value=" + listproducts[i].price + "></td>" +
+            "</tr>" +
+            "</table>" +
+            "<button class='edit' onclick='saveEdit(" + i + ");'style='position: relative; left: 624px;width: 100px' >SaveEdit</button>";
+        document.getElementById("edit").innerHTML = editfile;
+    }
+
+    function saveEdit(i) {
+        listproducts[i].link = document.getElementById("elink").value;
+        listproducts[i].bridal = document.getElementById("ebridal").value;
+        listproducts[i].productcode = document.getElementById("eproductcode").value;
+        listproducts[i].quantity = document.getElementById("equantity").value;
+        listproducts[i].price = document.getElementById("eprice").value;
+        displayProduct();
+        document.getElementById("edit").innerHTML = "";
+    }
+
+    function Search() {
+        let c = document.getElementById("keyword").value;
+        if (c == "") {
+        } else {
+            let index = -1;
+            for (let i = 0; i < listproducts.length; i++) {
+                if (c == listproducts[i].productname) {
+                    index = i;
+                    break;
+                }
+            }
+            if (index != -1) {
+                let body =
+                    "<tr>" +
+                    "<th>" + (index + 1) + "</th>" +
+                    "<td><img src=" + listproducts[index].link + " width='60' height='60'></td>" +
+                    "<td>" + listproducts[index].productname + "</td>" +
+                    "<td>" + listproducts[index].productcode + "</td>" +
+                    "<td>" + listproducts[index].quantity + "</td>" +
+                    "<td>" + listproducts[index].price + "</td>" +
+                    "<td>" + listproducts[index].money + "</td>" +
+                    "</tr>";
+                document.getElementById("body").innerHTML = body;
+            } else {
+                alert("Không tìm thấy");
+            }
+        }
+    }
+
+    let images = [];
+    for (let i = 0; i < 5; i++) {
+        images[i] = new Image();
+        images[i].src = "images/anh" + i + ".png";
+    }
+
+    let index = 0;
+
+    function next() {
+        index++;
+        if (index >= images.length) {
+            index = 0;
+        }
+        let anh = document.getElementById('anh');
+        anh.src = images[index].src;
+        document.getElementById("num").innerHTML = index + 1;
+    }
+
+    function prev() {
+        index--;
+        if (index < 0) {
+            index = images.length - 1;
+        }
+        let anh = document.getElementById("anh");
+        anh.src = images[index].src;
+        document.getElementById("num").innerHTML = index + 1;
+    }
+</script>
+</body>
+</html>
